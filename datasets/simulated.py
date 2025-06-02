@@ -20,8 +20,9 @@ class Dataset(BaseDataset):
     # is resolved
     test_parameters = {
         "n_samples, n_features, n_signals, X_density": [
-            (20_000, 1_000, 40, 1.0),
-            (200, 200_000, 20, 0.001),
+            (200, 1_000, 40, 1.0),
+            (200, 1_000, 20, 0.1),
+            (1_000, 10, 2, 1.0),
         ],
         "rho": [0, 0.5],
         "standardize": [False],
