@@ -8,8 +8,8 @@ with safe_import_context() as import_ctx:
     from download import download
     from rpy2 import robjects
     from rpy2.robjects import numpy2ri
-    from scipy.sparse import csc_array
     from scipy import sparse
+    from scipy.sparse import csc_array
     from sklearn.feature_selection import VarianceThreshold
     from sklearn.preprocessing import MaxAbsScaler, StandardScaler
 
