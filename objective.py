@@ -9,7 +9,7 @@ with safe_import_context() as import_ctx:
 class Objective(BaseObjective):
     name = "SLOPE_Path"
     min_benchopt_version = "1.5"
-    requirements = ["numpy", "sortedl1"]
+    requirements = ["numpy", "pip:sortedl1"]
     parameters = {
         "path_length": [100],
         "q": [0.1],
