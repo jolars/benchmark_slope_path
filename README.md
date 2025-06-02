@@ -6,7 +6,7 @@ This repository is dedicated algorithms that fit the
 full Sorted L-One Penalized
 Estimation (SLOPE) path, which consists in solving the following program:
 
-$$\text{minimize}_{\beta_0, \beta \in \mathbb{R}^p} \, \tfrac{1}{2n} \Vert y - \beta_0 - X\beta \Vert^2_2 + \alpha J(\beta, \lambda)$$
+$$\text{minimize}_{\beta_0, \beta \in \mathbb{R}^p} \left\{ \tfrac{1}{2n} \Vert y - \beta_0 - X\beta \Vert^2_2 + \alpha J(\beta, \lambda)\right\}$$
 
 for a sequence of values of $\alpha$, where
 
