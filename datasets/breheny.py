@@ -47,6 +47,11 @@ class Dataset(BaseDataset):
         "standardize": [True, False],
     }
 
+    test_parameters = {
+        "dataset": ["bcTCGA", "Rhee2006"],
+        "standardize": [True, False],
+    }
+
     install_cmd = "conda"
     requirements = ["rpy2", "numpy", "scipy", "appdirs", "r", "scikit-learn"]
 
