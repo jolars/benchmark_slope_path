@@ -1,0 +1,12 @@
+objective:
+  - SLOPE_Path[fit_intercept=False,q=0.2,path_length=100]
+
+dataset:
+  - Simulated[X_density=1.0,n_features=2000,n_samples=100,n_signals=10,rho=0.2]
+
+solver:
+  - rSLOPE
+  - sortedl1
+
+# note: use more repetitions to have quantiles on the plot
+n-repetitions: 1

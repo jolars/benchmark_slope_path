@@ -1,0 +1,39 @@
+# Cache directories
+__cache__/
+.pytest_cache/
+__pycache__/
+*.egg-info/
+.coverage
+.coverage.*
+**/outputs
+
+# IDE specific folders
+.vscode/
+
+# Config files
+benchopt.ini
+config.ini
+
+.DS_Store
+coverage.xml
+
+# nix -----------------------------------------------
+
+# Ignore build outputs from performing a nix-build or `nix build` command
+result
+result-*
+
+# Ignore direnv folder
+.direnv/
+
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
+*.sif
