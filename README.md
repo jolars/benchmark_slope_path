@@ -7,8 +7,11 @@ full Sorted L-One Penalized
 Estimation (SLOPE) path, which consists in solving the following program:
 
 $$\min_{\beta} \, \tfrac{1}{2n} \Vert y - X\beta \Vert^2_2 + \alpha J(\beta, \lambda)$$
+
 for a sequence of values of $\alpha$, where
+
 $$J(\beta, \lambda) = \sum_{j=1}^p \lambda_j \| \beta_{(j)}\|$$
+
 with $\lambda_1 \geq \lambda_2 \geq ... \geq \lambda_p$ and $\|\beta_{(1)}\| \geq \|\beta_{(2)}\| \geq ... \geq \|\beta_{(p)}\|$
 is the sorted $\ell_1$ norm.
 
