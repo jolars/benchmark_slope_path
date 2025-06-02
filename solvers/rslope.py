@@ -1,5 +1,5 @@
 from benchopt import BaseSolver, safe_import_context
-from benchopt.stopping_criterion import INFINITY, SufficientProgressCriterion
+from benchopt.stopping_criterion import INFINITY
 
 with safe_import_context() as import_ctx:
     import numpy as np
