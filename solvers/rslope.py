@@ -27,9 +27,6 @@ class Solver(BaseSolver):
     support_sparse = True
 
     sampling_strategy = "tolerance"
-    # stopping_criterion = SufficientProgressCriterion(
-    #     patience=5, eps=1e-18, strategy="tolerance"
-    # )
 
     def set_objective(self, X, y, fit_intercept, alphas, lambdas):
         self.y = y
