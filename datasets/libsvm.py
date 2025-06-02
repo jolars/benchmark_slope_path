@@ -21,6 +21,11 @@ class Dataset(BaseDataset):
         "standardize": [True, False],
     }
 
+    test_parameters = {
+        "dataset": ["real-sim"],
+        "standardize": [True, False],
+    }
+
     install_cmd = "conda"
     requirements = ["pip:libsvmdata", "scikit-learn"]
 
