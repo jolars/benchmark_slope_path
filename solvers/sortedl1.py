@@ -9,7 +9,7 @@ with safe_import_context() as import_ctx:
 class Solver(BaseSolver):
     name = "sortedl1"
     stopping_criterion = SufficientProgressCriterion(
-        patience=10, eps=1e-10, strategy="tolerance"
+        patience=6, eps=1e-10, strategy="tolerance"
     )
     install_cmd = "conda"
     requirements = ["pip:sortedl1"]
