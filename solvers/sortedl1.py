@@ -1,5 +1,5 @@
 from benchopt import BaseSolver, safe_import_context
-from benchopt.stopping_criterion import INFINITY, SufficientProgressCriterion
+from benchopt.stopping_criterion import INFINITY
 
 with safe_import_context() as import_ctx:
     import numpy as np
@@ -8,9 +8,7 @@ with safe_import_context() as import_ctx:
 
 class Solver(BaseSolver):
     name = "sortedl1"
-    stopping_criterion = SufficientProgressCriterion(
-        patience=6, eps=1e-10, strategy="tolerance"
-    )
+    sampling_strategy = "tolerance"
     install_cmd = "conda"
     requirements = ["pip:sortedl1"]
     references = [
@@ -52,6 +50,13 @@ class Solver(BaseSolver):
 
             self.coefs = coefs[:, 0, :]
             self.intercepts = intercepts[0, :]
+
+    @staticmethod
+    def get_next(prev_tol):
+        if prev_tol == INFINITY:
+            return 0.1
+        else:
+            return prev_tol * 0.2
 
     def get_result(self):
         return dict(coefs=self.coefs, intercepts=self.intercepts)
