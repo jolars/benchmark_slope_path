@@ -105,14 +105,14 @@
         sortedl1 = (
           pkgs.python3.pkgs.buildPythonPackage rec {
             pname = "sortedl1";
-            version = "1.2.0";
+            version = "1.3.1";
             pyproject = true;
 
             src = pkgs.fetchFromGitHub {
               owner = "jolars";
               repo = "sortedl1";
               tag = "v${version}";
-              hash = "sha256-8zDadGeHJNO0VLMIz2lDAsOUS+c1AB2wDoWDYcbLWVY=";
+              hash = "sha256-SN48r1k61oqXODPzE0fI5UNO8oLanAlal85rOcjn8CI=";
             };
 
             dontUseCmakeConfigure = true;
