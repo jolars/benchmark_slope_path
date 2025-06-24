@@ -40,6 +40,7 @@ class Solver(BaseSolver):
             max_iter=1_000_000,
             solver="hybrid",
             hybrid_cd_type=self.cd_type,
+            update_clusters=True,
         )
 
     def run(self, tol):
