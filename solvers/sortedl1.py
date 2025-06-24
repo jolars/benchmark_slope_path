@@ -11,6 +11,9 @@ class Solver(BaseSolver):
     sampling_strategy = "tolerance"
     install_cmd = "conda"
     requirements = ["pip:sortedl1"]
+    parameters = {
+        "cd_type": ["permuted", "cyclical"],
+    }
     references = [
         "J. Larsson, Q. Klopfenstein, M. Massias, and J. Wallin, "
         "“Coordinate descent for SLOPE,” in Proceedings of the 26th "
@@ -36,6 +39,7 @@ class Solver(BaseSolver):
             fit_intercept=self.fit_intercept,
             max_iter=1_000_000,
             solver="hybrid",
+            hybrid_cd_type=self.cd_type,
         )
 
     def run(self, tol):
