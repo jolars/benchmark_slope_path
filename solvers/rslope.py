@@ -31,6 +31,7 @@ class Solver(BaseSolver):
         setup_rpy2()
         if not packages.isinstalled("SLOPE"):
             robjects.r("install.packages('SLOPE', repos='https://cloud.r-project.org')")
+        packages.importr("SLOPE")
         self.y = y
         self.fit_intercept = fit_intercept
         self.alphas = alphas
