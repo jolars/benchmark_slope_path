@@ -32,7 +32,6 @@ class Dataset(BaseDataset):
     requirements = ["scikit-learn"]
 
     def __init__(
-        super().__init__()
         self,
         n_samples=10,
         n_features=50,
@@ -42,6 +41,7 @@ class Dataset(BaseDataset):
         standardize=True,
         random_state=27,
     ):
+        super().__init__()
         self.n_samples = n_samples
         self.n_features = n_features
         self.n_signals = n_signals
