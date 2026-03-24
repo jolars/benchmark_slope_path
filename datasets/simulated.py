@@ -32,6 +32,7 @@ class Dataset(BaseDataset):
     requirements = ["scikit-learn"]
 
     def __init__(
+        super().__init__()
         self,
         n_samples=10,
         n_features=50,
