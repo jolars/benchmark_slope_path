@@ -16,7 +16,7 @@ class Solver(BaseSolver):
     name = "rSLOPE"
 
     install_cmd = "conda"
-    requirements = ["r", "rpy2", "scipy"]
+    requirements = ["r-base", "rpy2", "scipy"]
     references = [
         "M. Bogdan, E. van den Berg, C. Sabatti, W. Su, and E. J. Candès, ",
         "“SLOPE – adaptive variable selection via convex optimization,” ",
