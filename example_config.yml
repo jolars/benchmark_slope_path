@@ -7,7 +7,6 @@ dataset:
 solver:
   - sortedl1
   - PGD
-  - ADMM
 
 # note: use more repetitions to have quantiles on the plot
 n-repetitions: 1
