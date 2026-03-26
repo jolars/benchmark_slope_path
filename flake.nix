@@ -208,8 +208,14 @@
         devShells.default = pkgs.mkShell {
           packages = [
             pkgs.bashInteractive
+            pkgs.llvmPackages.openmp
             pkgs.apptainer
-            pkgs.rWrapper
+            (pkgs.rWrapper.override {
+              packages = with pkgs.rPackages; [
+                SLOPE
+              ];
+            })
+
             (pkgs.python3.withPackages (ps: [
               (ps.rpy2.override {
                 extraRPackages = with pkgs.rPackages; [
@@ -226,6 +232,11 @@
               libsvmdata
             ]))
           ];
+          shellHook = ''
+            export LD_LIBRARY_PATH="${
+              pkgs.lib.makeLibraryPath [ pkgs.llvmPackages.openmp ]
+            }:''${LD_LIBRARY_PATH:-}"
+          '';
         };
       }
     );
