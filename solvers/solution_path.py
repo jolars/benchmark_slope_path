@@ -10,7 +10,7 @@ class Solver(BaseSolver):
     name = "SolutionPath"
     sampling_strategy = "iteration"
     install_cmd = "conda"
-    requirements = ["pip:git+https://github.com/jolars/slope-path"]
+    requirements = ["pip::git+https://github.com/jolars/slope-path"]
     # TODO: when benchopt 1.7 is released, update to
     # "pip::git..."
 
