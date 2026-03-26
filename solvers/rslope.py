@@ -3,13 +3,14 @@ from benchopt.stopping_criterion import INFINITY
 
 with safe_import_context() as import_ctx:
     import numpy as np
-    from benchopt.helpers.r_lang import setup_rpy2
+    from benchopt.helpers.r_lang import import_rpackages
     from rpy2 import robjects
     from rpy2.robjects import numpy2ri, packages
     from scipy import sparse
 
     # Setup the system to allow rpy2 running
     numpy2ri.activate()
+    import_rpackages("SLOPE")
 
 
 class Solver(BaseSolver):
@@ -28,10 +29,6 @@ class Solver(BaseSolver):
     sampling_strategy = "tolerance"
 
     def set_objective(self, X, y, fit_intercept, alphas, lambdas):
-        setup_rpy2()
-        if not packages.isinstalled("SLOPE"):
-            robjects.r("install.packages('SLOPE', repos='https://cloud.r-project.org')")
-        packages.importr("SLOPE")
         self.y = y
         self.fit_intercept = fit_intercept
         self.alphas = alphas
