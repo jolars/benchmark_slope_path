@@ -217,11 +217,7 @@
             })
 
             (pkgs.python3.withPackages (ps: [
-              (ps.rpy2.override {
-                extraRPackages = with pkgs.rPackages; [
-                  SLOPE
-                ];
-              })
+              ps.rpy2
               ps.scikit-learn
               ps.numba
               ps.appdirs
