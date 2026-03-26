@@ -69,10 +69,10 @@
         benchopt = (
           pkgs.python3.pkgs.buildPythonPackage rec {
             pname = "benchopt";
-            version = "1.6.0";
+            version = "1.9.0";
             src = pkgs.fetchPypi {
               inherit pname version;
-              hash = "sha256-/89xkqQ4bmfE+rvUzuQASa1S3h3Oqe82To0McAE5UX0=";
+              hash = "sha256-G0hx5cKM+dssBJ5yzN5s1yf3ZdKTI47O5aVde85fmNM=";
             };
 
             pyproject = true;
