@@ -6,9 +6,16 @@
     url = "github:numtide/flake-utils";
     inputs.systems.follows = "systems";
   };
+  inputs.libslope.url = "github:jolars/libslope";
+  inputs.libslope.inputs.nixpkgs.follows = "nixpkgs";
 
   outputs =
-    { nixpkgs, flake-utils, ... }:
+    {
+      nixpkgs,
+      flake-utils,
+      libslope,
+      ...
+    }:
     flake-utils.lib.eachDefaultSystem (
       system:
       let
@@ -79,7 +86,7 @@
 
             build-system = [
               pkgs.python3.pkgs.setuptools
-              pkgs.python3.pkgs.setuptools_scm
+              pkgs.python3.pkgs.setuptools-scm
             ];
 
             dependencies = with pkgs.python3.pkgs; [
@@ -116,6 +123,11 @@
             };
 
             dontUseCmakeConfigure = true;
+
+            buildInputs = [
+              pkgs.eigen
+              libslope.packages.${system}.default
+            ];
 
             build-system = [
               pkgs.python3.pkgs.scikit-build-core
