@@ -72,6 +72,13 @@
           }
         );
 
+        # Two Cython tests fail in the nixpkgs sandbox
+        line-profiler = pkgs.python3.pkgs.line-profiler.overridePythonAttrs (old: {
+          disabledTestPaths = (old.disabledTestPaths or [ ]) ++ [
+            "tests/test_cython.py"
+          ];
+        });
+
         # TODO: Upstream benchopt to nixpkgs
         benchopt = (
           pkgs.python3.pkgs.buildPythonPackage rec {
