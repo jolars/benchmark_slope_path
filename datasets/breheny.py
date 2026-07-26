@@ -7,7 +7,8 @@ with safe_import_context() as import_ctx:
     import appdirs
     import numpy as np
     from rpy2 import robjects
-    from rpy2.robjects import numpy2ri
+    from rpy2.robjects import default_converter, numpy2ri
+    from rpy2.robjects.conversion import localconverter
     from scipy import sparse
     from scipy.sparse import csc_array
     from sklearn.feature_selection import VarianceThreshold
@@ -28,11 +29,14 @@ def fetch_breheny(dataset: str):
         urllib.request.urlretrieve(url, path)
 
     read_rds = robjects.r["readRDS"]
-    numpy2ri.activate()
 
-    data = read_rds(path)
-    X = data[0]
-    y = data[1]
+    # `numpy2ri.activate()` is deprecated (and raises in recent rpy2), so use a
+    # local converter to turn the R arrays into numpy arrays instead.
+    np_cv_rules = default_converter + numpy2ri.converter
+    with localconverter(np_cv_rules):
+        data = read_rds(path)
+        X = np.asarray(data[0])
+        y = np.asarray(data[1])
 
     density = np.sum(X != 0) / X.size
 

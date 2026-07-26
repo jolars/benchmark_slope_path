@@ -74,10 +74,11 @@ class Solver(BaseSolver):
             )
 
     def get_result(self):
-        results = dict(zip(self.fit.names, list(self.fit)))
-        r_as = robjects.r["as"]
+        # Extract the coefficients in R to avoid relying on the Python wrapper
+        # type of the fit object (which varies across rpy2 versions).
+        get_coefs = robjects.r("function(fit) as.array(fit$coefficients)")
         with localconverter(np_cv_rules):
-            coefs_array = np.array(r_as(results["coefficients"], "array"))
+            coefs_array = np.array(get_coefs(self.fit))
 
         coefs = coefs_array[1:, 0, :] if self.fit_intercept else coefs_array[:, 0, :]
         intercepts = (
