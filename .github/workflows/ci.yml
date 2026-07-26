@@ -21,3 +21,22 @@ jobs:
       benchopt_branch: benchopt@main
   lint:
     uses: benchopt/template_benchmark/.github/workflows/lint_benchmarks.yml@main
+  windows:
+    name: Windows tests
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    env:
+      BENCHOPT_DEBUG: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jolars/setup-benchopt@main
+        with:
+          version: git
+          branch: benchopt@main
+      - name: Run benchmark tests
+        run: |
+          benchopt test . --env-name bench_test_env -vl
+          benchopt clean .
+          benchopt test . --env-name bench_test_env -vl --skip-install
