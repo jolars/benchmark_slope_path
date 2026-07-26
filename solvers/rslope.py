@@ -31,22 +31,29 @@ class Solver(BaseSolver):
     sampling_strategy = "tolerance"
 
     def set_objective(self, X, y, fit_intercept, alphas, lambdas):
-        self.y = y
         self.fit_intercept = fit_intercept
-        self.alphas = alphas
-        self.lambdas = lambdas
+        self.n_alphas = len(alphas)
 
-        if sparse.issparse(X):
-            r_Matrix = packages.importr("Matrix")
-            X = X.tocoo()
-            self.X = r_Matrix.sparseMatrix(
-                i=robjects.IntVector(X.row + 1),
-                j=robjects.IntVector(X.col + 1),
-                x=robjects.FloatVector(X.data),
-                dims=robjects.IntVector(X.shape),
-            )
-        else:
-            self.X = X
+        # Convert the numpy inputs to R objects up front so that the fit call
+        # itself does not need an active converter (which would also convert the
+        # returned R object into a Python structure).
+        with localconverter(np_cv_rules):
+            conv = robjects.conversion.get_conversion()
+            self.y = conv.py2rpy(y)
+            self.alphas = conv.py2rpy(alphas)
+            self.lambdas = conv.py2rpy(lambdas)
+
+            if sparse.issparse(X):
+                r_Matrix = packages.importr("Matrix")
+                X = X.tocoo()
+                self.X = r_Matrix.sparseMatrix(
+                    i=robjects.IntVector(X.row + 1),
+                    j=robjects.IntVector(X.col + 1),
+                    x=robjects.FloatVector(X.data),
+                    dims=robjects.IntVector(X.shape),
+                )
+            else:
+                self.X = conv.py2rpy(X)
 
         self.slope = robjects.r["SLOPE"]
 
@@ -59,19 +66,20 @@ class Solver(BaseSolver):
 
         fit_dict = {"lambda": self.lambdas, "alpha": self.alphas}
 
-        with localconverter(np_cv_rules):
-            self.fit = self.slope(
-                self.X,
-                self.y,
-                intercept=self.fit_intercept,
-                scale="none",
-                center=False,
-                max_passes=max_passes,
-                tol_rel_gap=tol * 0.1,
-                tol_infeas=tol,
-                tol_rel_coef_change=tol,
-                **fit_dict,
-            )
+        # All arguments are already R objects, so no converter is active here and
+        # the returned fit stays an R object for `get_result`.
+        self.fit = self.slope(
+            self.X,
+            self.y,
+            intercept=self.fit_intercept,
+            scale="none",
+            center=False,
+            max_passes=max_passes,
+            tol_rel_gap=tol * 0.1,
+            tol_infeas=tol,
+            tol_rel_coef_change=tol,
+            **fit_dict,
+        )
 
     def get_result(self):
         # Extract the coefficients in R to avoid relying on the Python wrapper
@@ -82,7 +90,7 @@ class Solver(BaseSolver):
 
         coefs = coefs_array[1:, 0, :] if self.fit_intercept else coefs_array[:, 0, :]
         intercepts = (
-            coefs_array[0, 0, :] if self.fit_intercept else np.zeros(len(self.alphas))
+            coefs_array[0, 0, :] if self.fit_intercept else np.zeros(self.n_alphas)
         )
 
         return dict(coefs=coefs, intercepts=intercepts)
