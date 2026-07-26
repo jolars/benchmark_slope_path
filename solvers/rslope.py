@@ -5,11 +5,13 @@ with safe_import_context() as import_ctx:
     import numpy as np
     from benchopt.helpers.r_lang import import_rpackages
     from rpy2 import robjects
-    from rpy2.robjects import numpy2ri, packages
+    from rpy2.robjects import default_converter, numpy2ri, packages
+    from rpy2.robjects.conversion import localconverter
     from scipy import sparse
 
-    # Setup the system to allow rpy2 running
-    numpy2ri.activate()
+    # Setup the system to allow rpy2 running. `numpy2ri.activate()` is
+    # deprecated (and raises in recent rpy2), so use a local converter instead.
+    np_cv_rules = default_converter + numpy2ri.converter
     import_rpackages("SLOPE")
 
 
@@ -57,23 +59,25 @@ class Solver(BaseSolver):
 
         fit_dict = {"lambda": self.lambdas, "alpha": self.alphas}
 
-        self.fit = self.slope(
-            self.X,
-            self.y,
-            intercept=self.fit_intercept,
-            scale="none",
-            center=False,
-            max_passes=max_passes,
-            tol_rel_gap=tol * 0.1,
-            tol_infeas=tol,
-            tol_rel_coef_change=tol,
-            **fit_dict,
-        )
+        with localconverter(np_cv_rules):
+            self.fit = self.slope(
+                self.X,
+                self.y,
+                intercept=self.fit_intercept,
+                scale="none",
+                center=False,
+                max_passes=max_passes,
+                tol_rel_gap=tol * 0.1,
+                tol_infeas=tol,
+                tol_rel_coef_change=tol,
+                **fit_dict,
+            )
 
     def get_result(self):
         results = dict(zip(self.fit.names, list(self.fit)))
         r_as = robjects.r["as"]
-        coefs_array = np.array(r_as(results["coefficients"], "array"))
+        with localconverter(np_cv_rules):
+            coefs_array = np.array(r_as(results["coefficients"], "array"))
 
         coefs = coefs_array[1:, 0, :] if self.fit_intercept else coefs_array[:, 0, :]
         intercepts = (
