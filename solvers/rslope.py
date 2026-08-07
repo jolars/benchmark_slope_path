@@ -15,7 +15,19 @@ class Solver(BaseSolver):
     name = "rSLOPE"
 
     install_cmd = "conda"
-    requirements = ["r-base", "r:r-slope", "r-matrix", "rpy2", "scipy"]
+    install_cmd = "conda"
+    requirements = [
+        "conda-forge::r-slope",
+        "conda-forge::r-matrix",
+        "conda-forge::rpy2",
+        "conda-forge::scipy",
+        # On Windows, rpy2 runs `R CMD config --ldflags` at import time to find
+        # the directory holding R.dll. R implements `CMD config` by querying
+        # etc/Makeconf with make, so without make on PATH it reports "R was not
+        # built as a library" and rpy2 fails with a TypeError. Windows has no
+        # system make, so pull it in from conda-forge.
+        "conda-forge::make",
+    ]
     references = [
         "M. Bogdan, E. van den Berg, C. Sabatti, W. Su, and E. J. Candes, ",
         "'SLOPE - adaptive variable selection via convex optimization,' ",
