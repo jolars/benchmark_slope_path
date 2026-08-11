@@ -193,7 +193,7 @@
         );
 
         libsvmdata = (
-          pkgs.python3.pkgs.buildPythonPackage rec {
+          pkgs.python3.pkgs.buildPythonPackage {
             pname = "libsvmdata";
             version = "unstable-2025-04-29";
             pyproject = true;
