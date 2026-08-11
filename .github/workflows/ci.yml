@@ -15,28 +15,19 @@ on:
     - cron: "42 7 * * 1"
 
 jobs:
-  benchopt_dev:
-    uses: benchopt/template_benchmark/.github/workflows/test_benchmarks.yml@main
-    with:
-      benchopt_branch: benchopt@main
-  lint:
-    uses: benchopt/template_benchmark/.github/workflows/lint_benchmarks.yml@main
-  windows:
-    name: Windows tests
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: bash
-    env:
-      BENCHOPT_DEBUG: 1
+  test-benchmark:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: jolars/setup-benchopt@main
         with:
           version: git
           branch: benchopt@main
-      - name: Run benchmark tests
-        run: |
-          benchopt test . --env-name bench_test_env -vl
-          benchopt clean .
-          benchopt test . --env-name bench_test_env -vl --skip-install
+      - run: benchopt test . --env-name bench_test_env -vl
+
+  lint:
+    uses: benchopt/template_benchmark/.github/workflows/lint_benchmarks.yml@main
