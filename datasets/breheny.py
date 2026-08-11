@@ -55,7 +55,20 @@ class Dataset(BaseDataset):
     }
 
     install_cmd = "conda"
-    requirements = ["rpy2", "numpy", "scipy", "appdirs", "r-base", "scikit-learn"]
+    requirements = [
+        "conda-forge::r-base",
+        "conda-forge::rpy2",
+        "conda-forge::numpy",
+        "conda-forge::scipy",
+        "conda-forge::appdirs",
+        "conda-forge::scikit-learn",
+        # On Windows, rpy2 runs `R CMD config --ldflags` at import time to find
+        # the directory holding R.dll. R implements `CMD config` by querying
+        # etc/Makeconf with make, so without make on PATH it reports "R was not
+        # built as a library" and rpy2 fails with a TypeError. Windows has no
+        # system make, so pull it in from conda-forge. See solvers/rslope.py.
+        "conda-forge::make",
+    ]
 
     def __init__(self, dataset="brca1", standardize=True):
         super().__init__()
