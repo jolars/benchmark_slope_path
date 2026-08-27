@@ -57,7 +57,10 @@ class Objective(BaseObjective):
             )
 
             # feasible dual through dual scaling
-            theta = residual
+            theta = residual.copy()
+            if self.fit_intercept:
+                # An unpenalized intercept imposes sum(theta) = 0 in the dual.
+                theta -= np.mean(theta)
             theta /= max(1, self._dual_norm_slope(theta, lambdas))
 
             duals[i] = (norm(self.y) ** 2 - norm(self.y - theta * n) ** 2) / (2 * n)

@@ -84,19 +84,29 @@ class Solver(BaseSolver):
                     if self.fit_intercept:
                         intercept -= np.mean(residual)
 
-                primal = 1.0 / (2 * n) * residual @ residual + np.sum(
-                    lambdas * np.sort(np.abs(coef))[::-1]
-                )
-
-                theta = residual / max(1, self._dual_norm_slope(grad * n, lambdas))
-                dual = (norm(self.y) ** 2 - norm(self.y + theta * n) ** 2) / (2 * n)
-
-                gap = primal - dual
+                gap = self._primal_dual_gap(coef, intercept, lambdas)
 
                 if gap <= tol:
                     self.coefs[:, i] = coef
                     self.intercepts[i] = intercept
                     break
+
+    def _primal_dual_gap(self, coef, intercept, lambdas):
+        n = self.X.shape[0]
+        residual = self.X @ coef + intercept - self.y
+        primal = 1.0 / (2 * n) * residual @ residual + np.sum(
+            lambdas * np.sort(np.abs(coef))[::-1]
+        )
+
+        theta = residual.copy()
+        if self.fit_intercept:
+            # An unpenalized intercept imposes sum(theta) = 0 in the dual.
+            theta -= np.mean(theta)
+        dual_gradient = self.X.T @ theta
+        theta /= max(1, self._dual_norm_slope(dual_gradient, lambdas))
+        dual = (norm(self.y) ** 2 - norm(self.y + theta * n) ** 2) / (2 * n)
+
+        return primal - dual
 
     def _prox(self, beta, lambdas):
         """Proximal operator of the OWL norm
