@@ -70,7 +70,7 @@ class Solver(BaseSolver):
 
     def get_result(self):
         coefs = self._interpolate_coefs(self.alpha_exact, self.coefs_exact)
-        return dict(coefs=coefs, intercepts=np.zeros(len(self.alphas)))
+        return {"coefs": coefs, "intercepts": np.zeros(len(self.alphas))}
 
     def _interpolate_coefs(self, alpha_exact, coefs_exact):
         coefs = np.zeros((self.n_features, len(self.alphas)))
