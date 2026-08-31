@@ -82,25 +82,29 @@ benchopt install . -s solver_name -d dataset_name
 
 ## Running the Benchmark
 
-To run the benchmark, simply use the `benchopt run` command:
+To run the benchmark with a 30-second cap for each solver, use the `benchopt
+run` command:
 
 ```bash
-benchopt run .
+benchopt run . --timeout 30
 ```
 
 By default, all solvers and datasets are run. You can restrict the benchmark to
 some solvers or datasets, e.g.:
 
 ```bash
-benchopt run -s solver_name -d simulated --max-runs 10 --n-repetitions 5
+benchopt run -s solver_name -d simulated --max-runs 10 --n-repetitions 5 --timeout 30
 ```
 
 You can also specify a YAML configuration file to set the parameters of the
 benchmark. An example config is provided in `example_config.yml`.
 
 ```bash
-benchopt run --config example_config.yml .
+benchopt run --config example_config.yml . --timeout 30
 ```
+
+The devenv shell sets the same 30-second default when `--timeout` is omitted.
+Pass another value to `--timeout` or use `--no-timeout` to override it.
 
 Use `benchopt run -h` for more details about these options, or visit
 <https://benchopt.github.io/api.html>.
