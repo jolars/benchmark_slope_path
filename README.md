@@ -104,3 +104,12 @@ benchopt run --config example_config.yml .
 
 Use `benchopt run -h` for more details about these options, or visit
 <https://benchopt.github.io/api.html>.
+
+## Accuracy target
+
+The benchmark stops sampling a solver's convergence curve once its measured
+maximum relative duality gap along the path reaches
+`target_rel_duality_gap`. The default target is `1e-7`. This objective-level
+rule applies uniformly to all solvers and avoids requesting accuracy beyond
+the range used for comparison. Set the objective parameter explicitly in a
+configuration file to use a different target.
