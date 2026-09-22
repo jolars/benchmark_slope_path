@@ -59,6 +59,7 @@ class TargetObjectiveCriterion(StoppingCriterion):
 
         return False, min(1.0, target / value)
 
+
 with safe_import_context() as import_ctx:
     import numpy as np
     from numpy.linalg import norm
